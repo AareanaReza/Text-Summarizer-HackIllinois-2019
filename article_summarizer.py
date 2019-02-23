@@ -12,7 +12,7 @@ def find_possible_topics(article_words, key_words):
 
 def print_results(frequencies):
     sentence_structure = "This article is about... (top word choices) "
-    print sentence_structure
+    print(sentence_structure)
     for i in range(min(len(frequencies), 10)):
         print(str(i + 1) + ". " + frequencies[i][0])
 
