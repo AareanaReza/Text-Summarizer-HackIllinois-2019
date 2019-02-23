@@ -1,7 +1,5 @@
 import string
-import numpy as np
 import gensim
-from gensim.parsing.preprocessing import STOPWORDS
 import nltk
 # nltk.download('punkt')
 # nltk.download('averaged_perceptron_tagger')
@@ -10,10 +8,13 @@ import string
 def strip_punctuation(str):
     return str.translate(string.maketrans("", ""), string.punctuation)
 
-def find_possible_topics(article_words, key_words):
+def find_possible_topics(article_words, key_words, title_words):
     possible_topics = []
+    for word in title_words:
+        possible_topics.append(word)
+
     for i in range(len(article_words)):
-        if article_words[i] in key_words:
+        if article_words[i] in key_words and article_words[i + 1] not in possible_topics:
             possible_topics.append(article_words[i + 1])
     return possible_topics
 
@@ -46,10 +47,7 @@ def summarize_article(article, title):
     title_words = title.split()
 
     key_words = ["for", "regarding", "concerning", "regard", "concern", "on", "displays", "predict", "the"]
-    possible_topics = find_possible_topics(article_words, key_words)
-    for word in title_words:
-        if word not in possible_topics:
-            possible_topics.append(word)
+    possible_topics = find_possible_topics(article_words, key_words, title_words)
     possible_topics_pos_list = nltk.pos_tag(preprocess(possible_topics))
     valid_possible_topics = get_valid_summary_words(possible_topics_pos_list)
 
@@ -85,6 +83,3 @@ sci_daily_article = "The composition of the microbiome -- the countless bacteria
 summarize_article(sustainability_article, sustainability_title)
 # summarize_article(sleep_article, sleep_title)
 # summarize_article(sci_daily_article, sci_daily_title)
-
-# new_article = preprocess(sci_daily_article)
-# nltk.pos_tag(new_article)
