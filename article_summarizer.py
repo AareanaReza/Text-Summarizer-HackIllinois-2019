@@ -21,7 +21,7 @@ def find_possible_topics(article_words, key_words, title_words):
 def print_results(frequencies):
     sentence_structure = "This article is about... (top word choices) "
     print sentence_structure
-    for i in range(min(len(frequencies), 20)):
+    for i in range(min(len(frequencies), 10)):
         print(str(i + 1) + ". " + frequencies[i][0])
 
 def preprocess(article_words):
@@ -46,7 +46,7 @@ def summarize_article(article, title):
     article_words = article.split()
     title_words = title.split()
 
-    key_words = ["for", "regarding", "concerning", "regard", "concern", "on", "displays", "predict", "the"]
+    key_words = ["for", "regarding", "concerning", "regard", "concern", "on", "displays", "predict"]
     possible_topics = find_possible_topics(article_words, key_words, title_words)
     possible_topics_pos_list = nltk.pos_tag(preprocess(possible_topics))
     valid_possible_topics = get_valid_summary_words(possible_topics_pos_list)
@@ -60,9 +60,9 @@ def summarize_article(article, title):
     for word in title_words:
         if word in valid_possible_topics:
             if word not in frequencies:
-                frequencies[word] = max(2, article_words.count(word))
+                frequencies[word] = max(3, article_words.count(word))
             else:
-                frequencies[word] += 2
+                frequencies[word] += 3
 
     frequencies = sorted(frequencies.items(),
                         reverse=True,
@@ -81,5 +81,5 @@ sci_daily_title = "Fungus from the intestinal mucosa can affect lung health. Our
 sci_daily_article = "The composition of the microbiome -- the countless bacteria, fungi and viruses that colonize our body surface, skin, intestines or lungs -- makes a decisive contribution to human health or disease. However, biological mechanisms that cause inflammations in the microbiome are still largely unknown. Together with a group of researchers from the University of Kiel and the University Hospital of Schleswig-Holstein, Professer Dr. Oliver Cornely (head of the Center of Excellence for Invasive Fungal Diseases at Cologne University Hospital) has deciphered a mechanism by which specific intestinal microbiota amplify inflammatory reactions in the lungs. The results of the study, published in Cell, could accelerate the development of new therapies for common diseases. 'The fungus Candida albicans, which colonizes the intestines, skin and mucous membranes, is actually harmless', Cornely said. 'However, our study has shown that Candida albicans affects the balance of our immune system.' Candida albicans stimulates the immune system to produce specific defence cells, so-called Th17 cells. However, some of these Th17 cells then attack other fungi, such as Aspergillus fumigatus. This phenomenon is called cross-reactivity. The research showed that immune-compromised individuals have an increased level of cross-reactive Th17 cells in their lung tissue. This concentration is associated with a deterioration of these patients' health. The protective Th17 reaction in the intestine seems to amplify pathogenic immune processes in the lungs. 'With this observation, we were able to show for the first time how a single member of the microbiome, Candida albicans, influences the specific immune response to a large group of other microbes. Immune cross-reactivity is probably a common mechanism by which the microbiome manipulates the immune system -- with both protective and harmful effects', Cornely remarked. Deciphering such specific effects of individual microbes will in future contribute to the development of targeted therapies."
 
 summarize_article(sustainability_article, sustainability_title)
-# summarize_article(sleep_article, sleep_title)
-# summarize_article(sci_daily_article, sci_daily_title)
+summarize_article(sleep_article, sleep_title)
+summarize_article(sci_daily_article, sci_daily_title)
