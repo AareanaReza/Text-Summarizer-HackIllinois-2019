@@ -33,7 +33,7 @@ def preprocess(article_words):
 
 def get_valid_summary_words(pos_list):
     valid_words = []
-    valid_pos_list = ["NN", "NNP", "VBG"]
+    valid_pos_list = ["NN", "NNS", "NNP", "VBG"]
     for word in pos_list:
         if word[1] in valid_pos_list:
             valid_words.append(word[0])
