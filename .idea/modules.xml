@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Text-Summarizer-HackIllinois-2019.iml" filepath="$PROJECT_DIR$/.idea/Text-Summarizer-HackIllinois-2019.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/Text-Summarizer.iml" filepath="$PROJECT_DIR$/.idea/Text-Summarizer.iml" />
     </modules>
   </component>
 </project>
