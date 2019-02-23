@@ -1,7 +1,6 @@
 import string
 import numpy as np
-import gensim
-# from gensim.parsing.preprocessing import STOPWORDS
+from gensim.parsing.preprocessing import STOPWORDS
 import nltk
 # nltk.download('punkt')
 # nltk.download('averaged_perceptron_tagger')
