@@ -1,4 +1,11 @@
 import string
+import numpy as np
+import gensim
+# from gensim.parsing.preprocessing import STOPWORDS
+import nltk
+# nltk.download('punkt')
+# nltk.download('averaged_perceptron_tagger')
+import string
 
 def strip_punctuation(str):
     return str.translate(string.maketrans("", ""), string.punctuation)
@@ -16,6 +23,21 @@ def print_results(frequencies):
     for i in range(min(len(frequencies), 20)):
         print(str(i + 1) + ". " + frequencies[i][0])
 
+def preprocess(article_words):
+   result = []
+   for word in article_words:
+       if word not in gensim.parsing.preprocessing.STOPWORDS and len(word) > 3:
+           result.append(word)
+   return result
+
+def get_valid_summary_words(pos_list):
+    valid_words = []
+    valid_pos_list = ["NN", "NNP"]
+    for word in pos_list:
+        if word[1] in valid_pos_list:
+            valid_words.append(word[0])
+    return valid_words
+
 def summarize_article(article, title):
     article = strip_punctuation(article).lower()
     title = strip_punctuation(title).lower()
@@ -23,26 +45,35 @@ def summarize_article(article, title):
     article_words = article.split()
     title_words = title.split()
 
+    # new_article = preprocess(article_words)
+    # print(nltk.pos_tag(new_article))
+
     key_words = ["for", "regarding", "concerning", "regard", "concern", "on", "displays", "predict", "the"]
     possible_topics = find_possible_topics(article_words, key_words)
+    # print(possible_topics)
+    possible_topics_pos_list = nltk.pos_tag(preprocess(possible_topics))
+    # print(possible_topics_pos_list)
+    valid_possible_topics = get_valid_summary_words(possible_topics_pos_list)
+    # print()
+    # print(valid_possible_topics)
     frequencies = {}
 
-    for word in possible_topics:
+    for word in valid_possible_topics:
         if word not in frequencies:
             frequencies[word] = article_words.count(word)
 
     for word in title_words:
-        if word not in frequencies:
-            frequencies[word] = max(2, article_words.count(word))
-        else:
-            frequencies[word] += 2
+        if word in valid_possible_topics:
+            if word not in frequencies:
+                frequencies[word] = max(2, article_words.count(word))
+            else:
+                frequencies[word] += 2
 
     frequencies = sorted(frequencies.items(),
                         reverse=True,
                         key=lambda x: x[1])
 
     print_results(frequencies)
-
 
 
 sustainability_title = "Sustainability Operations"
@@ -54,6 +85,9 @@ sleep_article = "A recent study categorizing people with obstructive sleep apnea
 sci_daily_title = "Fungus from the intestinal mucosa can affect lung health. Our microbiome can impair our immune system through the harmless fungus Candida albicans"
 sci_daily_article = "The composition of the microbiome -- the countless bacteria, fungi and viruses that colonize our body surface, skin, intestines or lungs -- makes a decisive contribution to human health or disease. However, biological mechanisms that cause inflammations in the microbiome are still largely unknown. Together with a group of researchers from the University of Kiel and the University Hospital of Schleswig-Holstein, Professer Dr. Oliver Cornely (head of the Center of Excellence for Invasive Fungal Diseases at Cologne University Hospital) has deciphered a mechanism by which specific intestinal microbiota amplify inflammatory reactions in the lungs. The results of the study, published in Cell, could accelerate the development of new therapies for common diseases. 'The fungus Candida albicans, which colonizes the intestines, skin and mucous membranes, is actually harmless', Cornely said. 'However, our study has shown that Candida albicans affects the balance of our immune system.' Candida albicans stimulates the immune system to produce specific defence cells, so-called Th17 cells. However, some of these Th17 cells then attack other fungi, such as Aspergillus fumigatus. This phenomenon is called cross-reactivity. The research showed that immune-compromised individuals have an increased level of cross-reactive Th17 cells in their lung tissue. This concentration is associated with a deterioration of these patients' health. The protective Th17 reaction in the intestine seems to amplify pathogenic immune processes in the lungs. 'With this observation, we were able to show for the first time how a single member of the microbiome, Candida albicans, influences the specific immune response to a large group of other microbes. Immune cross-reactivity is probably a common mechanism by which the microbiome manipulates the immune system -- with both protective and harmful effects', Cornely remarked. Deciphering such specific effects of individual microbes will in future contribute to the development of targeted therapies."
 
-# summarize_article(sustainability_article, sustainability_title)
-# summarize_article(sleep_article, sleep_title)
+summarize_article(sustainability_article, sustainability_title)
+summarize_article(sleep_article, sleep_title)
 summarize_article(sci_daily_article, sci_daily_title)
+
+# new_article = preprocess(sci_daily_article)
+# nltk.pos_tag(new_article)
