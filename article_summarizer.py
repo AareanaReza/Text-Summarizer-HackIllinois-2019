@@ -11,8 +11,8 @@ title_frequency_bonus = 3
 
 # cleans the string - strips all punctuation, trims leading/trailing whitespace, and converts to lowercase
 def clean_string(str):
-    # return str.translate({ord(c): '' for c in string.punctuation})
-    return str.translate(string.maketrans("", ""), string.punctuation).strip().lower()
+    return str.translate({ord(c): '' for c in string.punctuation})
+    # return str.translate(string.maketrans("", ""), string.punctuation).strip().lower()
 
 # returns true if the word is considered a stop word
 def is_stop_word(word):
