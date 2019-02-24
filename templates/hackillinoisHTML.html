@@ -15,16 +15,40 @@ Text Summarizer
   <script src="/js"></script>
 </head>
 <body onload=init()>
-<h4>
-<div class="About">
-  <button id="myDropdown" class="dropbtn">Dropdown</button>
-  <div id = "dropdown-content" class = "dropdown-content">
-    <a href="#home">Home</a>
-    <a href="#about">About</a>
-    <a href="#contact">Contact</a>
-  </div>
-</div>
-</h4>
+    <ul>
+        <li><a class="active" href="hackillinoisHTML.html">Home</a></li>
+        <li><a href="#news">Summarizer</a></li>
+        <li><a href="#home">About Us</a></li>
+    </ul>
+<style>
+  ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 5px 235px;
+  text-decoration: none;
+}
+
+li a:hover:not(.active) {
+  background-color: #111;
+}
+
+.active {
+  background-color: #4CAF50;
+}
+</style>
 <script>
 /* When the user clicks on the button,
 toggle between hiding and showing the dropdown content */
@@ -68,6 +92,21 @@ function init() {
 <!-- <input id="findSummary" type="button" value="Find Summary" findSummary.onclick="showSummary()"> -->
 <br>
 </h3>
+<style>
+  h3{
+	position: relative;
+	top: 200px;
+  right: -480px;
+  /* text-align: center; */
+}
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 5px 180px;
+  text-decoration: none;
+}
+</style>
 <p id="demo"></p>
 <br>
 <h5>
