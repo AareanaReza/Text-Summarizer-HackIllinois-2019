@@ -13,6 +13,7 @@ cors = CORS(app, resources={r"/foo": {"origins": "http://localhost:5000"}})
 @cross_origin(origin='localhost',headers=['Content- Type','Authorization'])
 def hello():
     text = scrapeweb.get_article_text(url)
+    
     response = jsonify(text)
     response.headers.add('Access-Control-Allow-Origin', '*')
     return response
@@ -29,4 +30,3 @@ def js():
 def css():
     return render_template('hackillinoisCSS.css')
 
-scrapeweb.get_article_text

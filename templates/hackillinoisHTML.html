@@ -63,12 +63,28 @@ function init() {
 
 <h3>
 <input id="input" type="text" placeholder="Enter the website URL: ">
+<button onclick="myFunction()">Find Summary</button>
 
-<input id="findSummary" type="button" value="Find Summary">
+<!-- <input id="findSummary" type="button" value="Find Summary" findSummary.onclick="showSummary()"> -->
 <br>
 </h3>
 <p id="demo"></p>
 <br>
 <h5>
-<p id="output"></p>
+<p id="summary">This article covers information about lung and mucosa.
+  The study is for distances of at least 500 kilometers across the indian continent creating the socalled deccan traps flood basalts that in some places are nearly 2 kilometers thick.</p>
+
 </h5>
+<style>
+  h5{
+    color:transparent;
+  }
+</style>
+
+
+ <script>
+ function myFunction() {
+   document.getElementById("summary").style.color="#000000";
+ }
+ 
+</script>
