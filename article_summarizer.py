@@ -14,8 +14,9 @@ key_words = ["for", "regarding", "concerning", "regard", "concern", "on", "displ
 
 # cleans the string - strips all punctuation, trims leading/trailing whitespace, and converts to lowercase
 def clean_string(str):
-    # return str.translate({ord(c): '' for c in string.punctuation})
-    return str.translate(string.maketrans("", ""), string.punctuation).strip().lower()
+    str = str
+    return str.translate({ord(c): '' for c in string.punctuation}).lower()
+    #return str.translate(string.maketrans("", ""), string.punctuation).strip().lower()
 
 
 # returns true if the word is considered a stop word
@@ -31,7 +32,7 @@ def find_possible_topics(article_words, key_words, title_words):
             possible_topics.append(word)
 
     for i in range(len(article_words)):
-        if article_words[i] in key_words and article_words[i + 1] not in possible_topics and not is_stop_word(word):
+        if article_words[i] in key_words and article_words[i + 1] not in possible_topics and not is_stop_word(article_words[i]):
             possible_topics.append(article_words[i + 1])
     return possible_topics
 
@@ -128,18 +129,12 @@ def clean_phrase_list(phrase_list):
 
 
 def remove_stop_words_within_pos_phrase_array(pos_phrase_list):
-    # print(pos_phrase_list)
-    words_in_phrase_list = [[]]
+    words_in_phrase_list = []
     for i in range(len(pos_phrase_list)):
         words_in_sentence = pos_phrase_list[i].split()
-        print(words_in_sentence)
         words_in_phrase_list.append(clean_words(words_in_sentence))
-        print(words_in_phrase_list)
-        print()
         words_in_phrase_list[i] = nltk.pos_tag(words_in_phrase_list[i])
-        # print(nltk.pos_tag(words_in_phrase_list[i]))
         words_in_phrase_list[i] = get_valid_summary_words(words_in_phrase_list[i])
-    print(words_in_phrase_list)
     return words_in_phrase_list
 
 # sample articles
@@ -154,6 +149,6 @@ sci_daily_title = "Fungus from the intestinal mucosa can affect lung health. Our
 sci_daily_article = "The composition of the microbiome -- the countless bacteria, fungi and viruses that colonize our body surface, skin, intestines or lungs -- makes a decisive contribution to human health or disease. However, biological mechanisms that cause inflammations in the microbiome are still largely unknown. Together with a group of researchers from the University of Kiel and the University Hospital of Schleswig-Holstein, Professer Dr. Oliver Cornely (head of the Center of Excellence for Invasive Fungal Diseases at Cologne University Hospital) has deciphered a mechanism by which specific intestinal microbiota amplify inflammatory reactions in the lungs. The results of the study, published in Cell, could accelerate the development of new therapies for common diseases. 'The fungus Candida albicans, which colonizes the intestines, skin and mucous membranes, is actually harmless', Cornely said. 'However, our study has shown that Candida albicans affects the balance of our immune system.' Candida albicans stimulates the immune system to produce specific defence cells, so-called Th17 cells. However, some of these Th17 cells then attack other fungi, such as Aspergillus fumigatus. This phenomenon is called cross-reactivity. The research showed that immune-compromised individuals have an increased level of cross-reactive Th17 cells in their lung tissue. This concentration is associated with a deterioration of these patients' health. The protective Th17 reaction in the intestine seems to amplify pathogenic immune processes in the lungs. 'With this observation, we were able to show for the first time how a single member of the microbiome, Candida albicans, influences the specific immune response to a large group of other microbes. Immune cross-reactivity is probably a common mechanism by which the microbiome manipulates the immune system -- with both protective and harmful effects', Cornely remarked. Deciphering such specific effects of individual microbes will in future contribute to the development of targeted therapies."
 
 # summarize_article(sustainability_article, sustainability_title)
-# summarize_article(sleep_article, sleep_title)
-summarize_article(sci_daily_article, sci_daily_title)
+#summarize_article(sleep_article, sleep_title)
+print(summarize_article(sci_daily_article, sci_daily_title))
 print(remove_stop_words_within_pos_phrase_array(clean_phrase_list(make_phrase_list(sci_daily_article))))
