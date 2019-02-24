@@ -62,7 +62,7 @@ def summarize_article(article, title):
     article_words = article.split()
     title_words = title.split()
 
-    key_words = ["about", "for", "regarding", "concerning", "on", "displays", "predict", "to", "discover"]
+    key_words = ["about", "for", "regarding", "concerning", "on", "displays", "predict", "to", "discover", "against", "of", "toward"]
     possible_topics = find_possible_topics(article_words, key_words, title_words)
     possible_topics_pos_list = nltk.pos_tag(possible_topics)
     # print(possible_topics_pos_list)
