@@ -47,14 +47,15 @@ def clean_words(article_words):
 
 
 # prints the top 10 results for words to complete the first summary sentence
-def print_results(frequencies, article, title):
+def print_results(frequencies, title, article):
     '''sentence_structure = "This article is about... (top word choices) "
     print(sentence_structure)
     for i in range(min(len(frequencies), 10)):
         print(str(i + 1) + ". " + frequencies[i][0])'''
 
     print("This article covers information about " + frequencies[0][0] + " and " + frequencies[1][0] + ".")
-    print("The study is about " + get_frequency(remove_stop_words_within_pos_phrase_array(clean_phrase_list(make_phrase_list(volcano_article))), article, title) + ".")
+    print(article)
+    print("The study is " + get_frequency(remove_stop_words_within_pos_phrase_array(clean_phrase_list(make_phrase_list(volcano_article))), title, article) + ".")
 
 
 # returns a list of words that have the part of speech (noun, plural noun, etc.) we'd use in our first summary sentence
@@ -127,6 +128,8 @@ def clean_phrase_list(phrase_list):
         for word in key_words:
             phrase_list[i] = clean_string(phrase_list[i])
             if phrase_list[i].__contains__(" " + word + " "):
+                if (word == "how"):
+                    pos_phrase_list.append("about ")
                 pos_phrase_list.append(word + phrase_list[i].split(" " + word)[1])
     original_phrase_list.extend(pos_phrase_list)
     return pos_phrase_list
