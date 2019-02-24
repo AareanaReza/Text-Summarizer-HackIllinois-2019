@@ -1,0 +1,63 @@
+<h1>
+<img>
+https://lh3.googleusercontent.com/uHoxqCPVF6J8lKKvzoyan3LvGdnaUb9AHDAhqyO4r-Be6gjsfrTNOaK5TB35vAK8AVapqneFkI5TRhBw07kqjs4a9pONzA98EzKojrjtsZulaGq9Z91KHpSC0elhCQv8j290K4sUdeKZgILnWBB9CS_Azs5jr4NpJ64WLcZ44Xkvg0ZCi1DMPPcBWdbwdmhxEbvEZUrT5uMFQRfxVoIA24TSP_sgLA_2r7TnofOJ2ACEQwig5fWc8dIRMnx08TKo1qHycfD0bcNoX_34-T4rhvvp5AfXEXbpqcslwYAAqqyi2MzccWDDxyO4j3XVoOWKXqM-JLobscMbmhalID9rGjp3Gybtv-D0y1ojGEnFJcP09JQNwZicomMYPJ8a2DFb4mW0DbaG9UmPeO2cSSHFGC0K3J9cT0LMJtJTjbbZUSy5hNYY-5OKJvporzEghn_DJCYAVDxH_VmHmaZdkuEpT3M0IowE8eJiUk1I4C_etqXI0ngcOVGYm5fYcTA93rpPezZi1_NYbtok60gX6afSlgqBCHPUHcWE-3jyA8VfyS4f9hsX4oKT5gEI37n1I20vhZ6GinEHcuVJ_6bCLzAMG9uwjNGCjlvozieHCm4oIbd-y661OfEUqvpyYw_CrDWNnpSgXvImWVjuas4Dc0OSjXT7h_goXxo=w171-h172-no
+</img>
+</h1>
+<h2>
+Text Summarizer
+</h2>
+
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<h4>
+<div class="About">
+  <button onclick="myFunction()" class="dropbtn">Dropdown</button>
+  <div id="myDropdown" class="dropdown-content">
+    <a href="#home">Home</a>
+    <a href="#about">About</a>
+    <a href="#contact">Contact</a>
+  </div>
+</div>
+</h4>
+<script>
+/* When the user clicks on the button, 
+toggle between hiding and showing the dropdown content */
+function myFunction() {
+  document.getElementById("myDropdown").classList.toggle("show");
+}
+
+// Close the dropdown if the user clicks outside of it
+window.onclick = function(event) {
+  if (!event.target.matches('.dropbtn')) {
+    var dropdowns = document.getElementsByClassName("dropdown-content");
+    var i;
+    for (i = 0; i < dropdowns.length; i++) {
+      var openDropdown = dropdowns[i];
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show');
+      }
+    }
+  }
+}
+</script>
+<h6>
+<input id="phoneNumberInput" type="text" placeholder="Enter your phone number: ">
+<button id="phoneNumberButton">Get Text of Summary</button>
+</h6>
+
+</body>
+
+<h3>
+<input id="input" type="text" placeholder="Enter the website URL: ">
+
+<input type="button" onclick="myFunction()" value="Find Summary">
+<br>
+</h3>
+<p id="demo"></p>
+<br>
+<h5>
+<p id="output"></p>
+</h5>
+
