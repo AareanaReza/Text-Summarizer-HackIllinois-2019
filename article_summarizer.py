@@ -16,8 +16,8 @@ def is_stop_word(word):
 
 # returns a list of possible topics - words that appear directly after a keyword or words in the title
 def find_possible_topics(article_words, key_words, title_words):
-	possible_topics = []
-	for word in title_words:
+    possible_topics = []
+    for word in title_words:
         if not is_stop_word(word):
             possible_topics.append(word)
             
