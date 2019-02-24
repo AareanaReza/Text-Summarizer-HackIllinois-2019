@@ -2,7 +2,6 @@ import string
 import gensim
 import nltk
 import string
-import numpy as np
 # nltk.download('punkt')
 # nltk.download('averaged_perceptron_tagger')
 
