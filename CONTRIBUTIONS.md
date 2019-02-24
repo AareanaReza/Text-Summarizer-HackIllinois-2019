@@ -11,4 +11,4 @@
 
 ### Web-scrapers: 
 * Medha Patil - medhapatil medhap3@illinois.edu
-* Aareana Reza - AareanaReza aareana.reza@gmail.com
+* Aareana Reza - AareanaReza areza5@illinois.edu
