@@ -8,6 +8,3 @@ Cynthia Damodaran, Maeve Heflin
 
 ### Web-scrapers: 
 Aareana Reza, Medha Patil
-
-#### Additional contributors: 
-Yingan Wang
