@@ -1,24 +1,91 @@
 h1 {
-  color: rgb(20, 30, 90);
-  font-size: 40px;
-  font-family: "Calibri"
-	margin: 0;
-  padding: 0;
+
+  position: absolute;
+  top: -10px;
+  right: -80px;
+  font-size: 1px;
 }
 
-.para1 {
-  margin-left: 25px;
-  line-height: 25px;
+.dropbtn {
+	width: 210px;
+  background-color: #3498DB;
+  color: white;
+  padding: 5px;
+  font-size: 16px;
+  border: none;
+  cursor: pointer;
 }
 
-footer {
-  clear: left;
-  background: #ccc;
+.dropbtn:hover, .dropbtn:focus {
+  background-color: #2980B9;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f1f1f1;
+  min-width: 160px;
+  overflow: auto;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown a:hover {background-color: #ddd;}
+
+.show {display: block;}
+img { 
+  width: 50%;
+  height: 60%;
 }
 
 
-nav {
-    border-bottom: 1px solid black;
+
+
+h2{
+  color:black;
+  font-family: "Courier";
+  text-align: center;
+  font-size:50px;
+}
+
+h3{
+	position: absolute;
+	top: 240px;
+	right: 120px;
+}
+
+h4{
+	position: absolute;
+	top: 80px;
+	right: 160px;
+}
+
+h5{
+	position: absolute;
+	left: 100px;
+	top: 260px;
+}
+
+body {
+	background-image: linear-gradient(to right, #ddd6f3, #faaca8);
+}
+
+h6{
+	position: absolute;
+	top: 300px;
+	right: 100px;
 }
 
 ul {
@@ -47,20 +114,4 @@ li a:hover:not(.active) {
 
 .active {
   background-color: #4CAF50;
-}
-
-div {
-	font-size: 40px;
-	font-family: "Times New Roman"
-}
-
-summary{
-	color: black;
-	font-weight: bold
-}
-
-body {
- 
-	background-image: url(http://darlenefranklinwrites.com/wp-content/uploads/2017/12/deluxe-professional-website-background-images-free-abstract-blue-vector-background-free-vector-in-professional-website-background-images.jpg);
-
 }
