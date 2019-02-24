@@ -37,7 +37,7 @@ function init() {
   // Close the dropdown if the user clicks outside of it
   document.getElementById("findSummary").onclick = function(event) {
 
-    fetchUrl("http://localhost:5000/data");
+    fetchUrl();
   }
 
   
@@ -58,11 +58,6 @@ function init() {
 
 
 </script>
-
-<h6>
-<input id="phoneNumberInput" type="text" placeholder="Enter your phone number: ">
-<button id="phoneNumberButton">Get Text of Summary</button>
-</h6>
 
 </body>
 

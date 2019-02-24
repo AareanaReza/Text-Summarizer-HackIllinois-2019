@@ -12,7 +12,7 @@ function processUrl(url) {
     .then(function (response) {
       // handle success
       console.log(response);
-      // getElementById("output") =
+      document.getElementById("output").value = response.data;
     })
     .catch(function (error) {
       // handle error
