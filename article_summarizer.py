@@ -2,12 +2,17 @@ import string
 import gensim
 import nltk
 import string
+import numpy as np
 # nltk.download('punkt')
 # nltk.download('averaged_perceptron_tagger')
 
+max_number_of_results = 10
+title_frequency_bonus = 3
+
 # cleans the string - strips all punctuation, trims leading/trailing whitespace, and converts to lowercase
-def strip_punctuation(str):
+def clean_string(str):
     return str.translate({ord(c): '' for c in string.punctuation})
+    # return str.translate(string.maketrans("", ""), string.punctuation).strip().lower()
 
 # returns true if the word is considered a stop word
 def is_stop_word(word):
@@ -19,7 +24,7 @@ def find_possible_topics(article_words, key_words, title_words):
     for word in title_words:
         if not is_stop_word(word):
             possible_topics.append(word)
-            
+
     for i in range(len(article_words)):
         if article_words[i] in key_words and article_words[i + 1] not in possible_topics and not is_stop_word(word):
             possible_topics.append(article_words[i + 1])
@@ -52,8 +57,8 @@ def make_word_pairs(possible_topics):
 
 # print options for the first summary sentence for an article
 def summarize_article(article, title):
-    article = strip_punctuation(article).lower()
-    title = strip_punctuation(title).lower()
+    article = clean_string(article)
+    title = clean_string(title)
 
     article_words = article.split()
     title_words = title.split()
@@ -61,8 +66,8 @@ def summarize_article(article, title):
     key_words = ["for", "regarding", "concerning", "regard", "concern", "on", "displays", "predict"]
     possible_topics = find_possible_topics(article_words, key_words, title_words)
     possible_topics_pos_list = nltk.pos_tag(possible_topics)
-    possible_topics_pos_list.extend((make_word_pairs(possible_topics)))
-    print(possible_topics_pos_list)
+    # print(possible_topics_pos_list)
+    # possible_topics_pos_list.extend(make_word_pairs(possible_topics))
     valid_possible_topics = get_valid_summary_words(possible_topics_pos_list)
     frequencies = {}
 
