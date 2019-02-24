@@ -1,42 +1,39 @@
 import string
 import gensim
 import nltk
-# nltk.download('punkt')
-# nltk.download('averaged_perceptron_tagger')
 import string
 import numpy as np
+# nltk.download('punkt')
+# nltk.download('averaged_perceptron_tagger')
 
-
+# cleans the string - strips all punctuation, trims leading/trailing whitespace, and converts to lowercase
 def strip_punctuation(str):
     return str.translate({ord(c): '' for c in string.punctuation})
 
+# returns true if the word is considered a stop word
+def is_stop_word(word):
+    return word in gensim.parsing.preprocessing.STOPWORDS or len(word) <= 3
 
+# returns a list of possible topics - words that appear directly after a keyword or words in the title
 def find_possible_topics(article_words, key_words, title_words):
-    possible_topics = []
-    for word in title_words:
-        possible_topics.append(word)
-
+	possible_topics = []
+	for word in title_words:
+        if not is_stop_word(word):
+            possible_topics.append(word)
+            
     for i in range(len(article_words)):
-        if article_words[i] in key_words and article_words[i + 1] not in possible_topics:
+        if article_words[i] in key_words and article_words[i + 1] not in possible_topics and not is_stop_word(word):
             possible_topics.append(article_words[i + 1])
     return possible_topics
 
-
+# prints the top 10 results for words to complete the first summary sentence
 def print_results(frequencies):
     sentence_structure = "This article is about... (top word choices) "
     print(sentence_structure)
     for i in range(min(len(frequencies), 10)):
         print(str(i + 1) + ". " + frequencies[i][0])
 
-
-def preprocess(article_words):
-    result = []
-    for word in article_words:
-        if word not in gensim.parsing.preprocessing.STOPWORDS and len(word) > 3:
-            result.append(word)
-    return result
-
-
+# returns a list of words that have the part of speech (noun, plural noun, etc.) we'd use in our first summary sentence
 def get_valid_summary_words(pos_list):
     valid_words = []
     valid_pos_list = ["NN", "NNS", "NNP", "VBG", "FW"]
@@ -52,7 +49,7 @@ def make_word_pairs(possible_topics):
         pairs.append(possible_topics[i] + " " + possible_topics[i + 1])
     return pairs
 
-
+# print options for the first summary sentence for an article
 def summarize_article(article, title):
     article = strip_punctuation(article).lower()
     title = strip_punctuation(title).lower()
@@ -62,17 +59,19 @@ def summarize_article(article, title):
 
     key_words = ["for", "regarding", "concerning", "regard", "concern", "on", "displays", "predict"]
     possible_topics = find_possible_topics(article_words, key_words, title_words)
-    possible_topics_pos_list = nltk.pos_tag(preprocess(possible_topics))
+    possible_topics_pos_list = nltk.pos_tag(possible_topics)
     possible_topics_pos_list.extend((make_word_pairs(possible_topics)))
     print(possible_topics_pos_list)
     valid_possible_topics = get_valid_summary_words(possible_topics_pos_list)
-
     frequencies = {}
 
+    # find and save the frequencies of all the words in valid_possible_topics
     for word in valid_possible_topics:
         if word not in frequencies:
             frequencies[word] = article_words.count(word)
 
+    # find and save the frequencies of all words in the title, taking into account a frequency bonus
+    # (since words in the title are usually more important)
     for word in title_words:
         if word in valid_possible_topics:
             if word not in frequencies:
@@ -80,12 +79,15 @@ def summarize_article(article, title):
             else:
                 frequencies[word] += 3
 
+    # sort the dictionary in reverse order by frequency (so that the words that occur most will be printed first)
     frequencies = sorted(frequencies.items(),
                          reverse=True,
                          key=lambda x: x[1])
 
     print_results(frequencies)
 
+
+# sample articles
 
 sustainability_title = "Sustainability Operations"
 sustainability_article = "At Caterpillar, sustainability begins within our own operations. We have established high performance standards for environment, health and safety at our facilities that extend beyond compliance with laws and regulations. Proactive implementation of these standards demonstrates our commitment to sustainability leadership in our industry. We are dedicated to the safety of everyone at Caterpillar. We promote the health and safety of our people with policies and proactive programs that help individuals stay safe, personally and professionally. We develop our products, manufacturing processes, training programs and customer assistance programs to minimize safety risks because the safety of our operations and the unique capabilities of our employees ensure the long-term success of our enterprise. As well, our facilities have been working to minimize the environmental impact of our operations, including a focus on energy conservation, greenhouse gas emissions reductions, water conservation and waste reduction. Our Environment, Health and Safety (EHS) Professionals play a key role in providing expertise and support to Caterpillar operations around the world. They have teamed with Caterpillar leadership to drive tremendous improvement and heightened awareness of the importance of EHS across our enterprise. Employees of Team Caterpillar are engaged in identifying and managing risk and are active participants in continuously improving the environment, health and safety of our operations."
