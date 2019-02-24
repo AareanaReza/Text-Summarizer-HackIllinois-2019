@@ -1,8 +1,5 @@
 <h1>
-<img>
-https://lh3.googleusercontent.com/uHoxqCPVF6J8lKKvzoyan3LvGdnaUb9AHDAhqyO4r-Be6gjsfrTNOaK5TB35vAK8AVapqneFkI5TRhBw07kqjs4a9pONzA98EzKojrjtsZulaGq9Z91KHpSC0elhCQv8j290K4sUdeKZgILnWBB9CS_Azs5jr4NpJ64WLcZ44Xkvg0ZCi1DMPPcBWdbwdmhxEbvEZUrT5uMFQRfxVoIA24TSP_sgLA_2r7TnofOJ2ACEQwig5fWc8dIRMnx08TKo1qHycfD0bcNoX_34-T4rhvvp5AfXEXbpqcslwYAAqqyi2MzccWDDxyO4j3XVoOWKXqM-JLobscMbmhalID9rGjp3Gybtv-D0y1ojGEnFJcP09JQNwZicomMYPJ8a2DFb4mW0DbaG9UmPeO2cSSHFGC0K3J9cT0LMJtJTjbbZUSy5hNYY-5OKJvporzEghn_DJCYAVDxH_VmHmaZdkuEpT3M0IowE8eJiUk1I4C_etqXI0ngcOVGYm5fYcTA93rpPezZi1_NYbtok60gX6afSlgqBCHPUHcWE-3jyA8VfyS4f9hsX4oKT5gEI37n1I20vhZ6GinEHcuVJ_6bCLzAMG9uwjNGCjlvozieHCm4oIbd-y661OfEUqvpyYw_CrDWNnpSgXvImWVjuas4Dc0OSjXT7h_goXxo=w171-h172-no
-</img>
-</h1>
+\</h1>
 <h2>
 Text Summarizer
 </h2>
@@ -15,16 +12,40 @@ Text Summarizer
   <script src="/js"></script>
 </head>
 <body onload=init()>
-<h4>
-<div class="About">
-  <button id="myDropdown" class="dropbtn">Dropdown</button>
-  <div id = "dropdown-content" class = "dropdown-content">
-    <a href="#home">Home</a>
-    <a href="#about">About</a>
-    <a href="#contact">Contact</a>
-  </div>
-</div>
-</h4>
+    <ul>
+        <li><a class="active" href="hackillinoisHTML.html">Home</a></li>
+        <li><a href="#news">Summarizer</a></li>
+        <li><a href="#home">About Us</a></li>
+    </ul>
+<style>
+  ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 5px 235px;
+  text-decoration: none;
+}
+
+li a:hover:not(.active) {
+  background-color: #111;
+}
+
+.active {
+  background-color: #4CAF50;
+}
+</style>
 <script>
 /* When the user clicks on the button,
 toggle between hiding and showing the dropdown content */
@@ -68,13 +89,28 @@ function init() {
 <!-- <input id="findSummary" type="button" value="Find Summary" findSummary.onclick="showSummary()"> -->
 <br>
 </h3>
+<style>
+  h3{
+	position: relative;
+	top: 75px;
+  right: -480px;
+  /* text-align: center; */
+}
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 5px 180px;
+  text-decoration: none;
+}
+</style>
 <p id="demo"></p>
 <br>
 <h5>
 <p id="summary">This article covers information about lung and mucosa.
-  The study is for distances of at least 500 kilometers across the indian continent creating the socalled deccan traps flood basalts that in some places are nearly 2 kilometers thick.</p>
-
+    The study is for distances of at least 500 kilometers across the indian continent creating the socalled deccan traps flood basalts that in some places are nearly 2 kilometers thick.</p>
 </h5>
+  <!-- <p id = "output"></p> -->
 <style>
   h5{
     color:transparent;
@@ -85,6 +121,8 @@ function init() {
  <script>
  function myFunction() {
    document.getElementById("summary").style.color="#000000";
+  // summarizer = document.getElementById('String').value
+  // document.getElementById('output').innerHTML = "wow"
  }
  
 </script>

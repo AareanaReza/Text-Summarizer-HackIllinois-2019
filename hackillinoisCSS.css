@@ -63,9 +63,10 @@ h2{
 }
 
 h3{
-	position: absolute;
-	top: 240px;
-	right: 120px;
+	position: relative;
+	/* top: 240px;
+  right: 40px;  */
+  text-align: center;
 }
 
 h4{
@@ -88,4 +89,32 @@ h6{
 	position: absolute;
 	top: 300px;
 	right: 100px;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 5px 230px;
+  text-decoration: none;
+}
+
+li a:hover:not(.active) {
+  background-color: #111;
+}
+
+.active {
+  background-color: #4CAF50;
 }
