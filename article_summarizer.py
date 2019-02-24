@@ -16,7 +16,7 @@ def clean_string(str):
 
 # returns true if the word is considered a stop word
 def is_stop_word(word):
-    return word in gensim.parsing.preprocessing.STOPWORDS or len(word) <= 3
+    return word in gensim.parsing.preprocessing.STOPWORDS
 
 # returns a list of possible topics - words that appear directly after a keyword or words in the title
 def find_possible_topics(article_words, key_words, title_words):
@@ -34,7 +34,7 @@ def find_possible_topics(article_words, key_words, title_words):
 def print_results(frequencies):
     sentence_structure = "This article is about... (top word choices) "
     print(sentence_structure)
-    for i in range(min(len(frequencies), 10)):
+    for i in range(min(len(frequencies), max_number_of_results)):
         print(str(i + 1) + ". " + frequencies[i][0])
 
     print("This article covers information about " + frequencies[0][0] + " and " + frequencies[1][0] + ".")
@@ -47,7 +47,6 @@ def get_valid_summary_words(pos_list):
         if word[1] in valid_pos_list:
             valid_words.append(word[0])
     return valid_words
-
 
 def make_word_pairs(possible_topics):
     pairs = []
@@ -63,9 +62,10 @@ def summarize_article(article, title):
     article_words = article.split()
     title_words = title.split()
 
-    key_words = ["for", "regarding", "concerning", "regard", "concern", "on", "displays", "predict"]
+    key_words = ["about", "for", "regarding", "concerning", "on", "displays", "predict", "to", "discover"]
     possible_topics = find_possible_topics(article_words, key_words, title_words)
     possible_topics_pos_list = nltk.pos_tag(possible_topics)
+    # print(possible_topics_pos_list)
     # possible_topics_pos_list.extend(make_word_pairs(possible_topics))
     valid_possible_topics = get_valid_summary_words(possible_topics_pos_list)
     frequencies = {}
@@ -80,9 +80,9 @@ def summarize_article(article, title):
     for word in title_words:
         if word in valid_possible_topics:
             if word not in frequencies:
-                frequencies[word] = max(3, article_words.count(word))
+                frequencies[word] = max(title_frequency_bonus, article_words.count(word) + title_frequency_bonus)
             else:
-                frequencies[word] += 3
+                frequencies[word] += title_frequency_bonus
 
     # sort the dictionary in reverse order by frequency (so that the words that occur most will be printed first)
     frequencies = sorted(frequencies.items(),
