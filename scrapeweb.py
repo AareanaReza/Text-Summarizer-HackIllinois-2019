@@ -18,13 +18,10 @@ def get_article_text(article_url):
     final_text = ""
 
     title = soup.find('h1', {'id': 'headline'}).text
-    # There is a '$$$' after the title to help separate it from the rest of the article
-    final_text = final_text + title + "$$$"
     # Takes all the <p> tags in the <div> tagged block with id= 'text'
     div = soup.find('div', {'id': 'text'})  # attrs={'id': 'story_text'}
-    final_text = final_text + soup.find('p', {'id': 'first'}).text + '%%%'
+    final_text = final_text + soup.find('p', {'id': 'first'}).text
     for p in div.findAll('p'):
-        # '%%%' after each line of text to help with summarizing article
-        final_text = final_text + p.text + '%%%'
+        final_text = final_text + p.text
     return final_text
 

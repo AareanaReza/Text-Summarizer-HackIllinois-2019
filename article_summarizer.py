@@ -4,12 +4,20 @@ import nltk
 import string
 import numpy as np
 
+# Using Beautiful Soup library to web scrape sciencedaily.com
+from bs4 import BeautifulSoup
+
+# Certification required for Http request
+import certifi
+import urllib3
+
 # nltk.download('punkt')
 # nltk.download('averaged_perceptron_tagger')
 
-max_number_of_results = 10
+http = urllib3.PoolManager(cert_reqs='CERT_REQUIRED', ca_certs=certifi.where())
+
 title_frequency_bonus = 3
-key_words = ["regarding", "concerning", "regard", "concern", "on", "displays", "predict", "how"]
+key_words = ["regarding", "concerning", "regard", "concern", "on", "displays", "predict", "how", "for"]
 original_phrase_list = []
 
 # cleans the string - strips all punctuation, trims leading/trailing whitespace, and converts to lowercase
@@ -54,7 +62,6 @@ def print_results(frequencies, title, article):
         print(str(i + 1) + ". " + frequencies[i][0])'''
 
     print("This article covers information about " + frequencies[0][0] + " and " + frequencies[1][0] + ".")
-    print(article)
     print("The study is " + get_frequency(remove_stop_words_within_pos_phrase_array(clean_phrase_list(make_phrase_list(volcano_article))), title, article) + ".")
 
 
@@ -76,8 +83,22 @@ def make_word_pairs(possible_topics):
 
 
 # print options for the first summary sentence for an article
-def summarize_article(article, title):
-    article = clean_string(article)
+def summarize_article(article_url):
+    # Takes in the article url and returns only the text within that article
+
+    url = article_url
+    response = http.request('GET', url)
+    soup = BeautifulSoup(response.data, features="html.parser")
+    final_text = ""
+    title = soup.find('h1', {'id': 'headline'}).text
+    # Takes all the <p> tags in the <div> tagged block with id= 'text'
+    div = soup.find('div', {'id': 'text'})  # attrs={'id': 'story_text'}
+    final_text = final_text + soup.find('p', {'id': 'first'}).text
+    for p in div.findAll('p'):
+        final_text = final_text + p.text
+
+
+    article = clean_string(final_text)
     title = clean_string(title)
 
     article_words = article.split()
@@ -108,6 +129,7 @@ def summarize_article(article, title):
     frequencies = sorted(frequencies.items(),
                          reverse=True,
                          key=lambda x: x[1])
+    print(frequencies)
 
     print_results(frequencies, article, title)
 
@@ -180,5 +202,5 @@ volcano_title = "Do volcanoes or an asteroid deserve blame for dinosaur extincti
 volcano_article = "But it leaves unclear to what degree the two catastrophes contributed to the near-simultaneous mass extinction that killed off the dinosaurs and many other forms of life. The research sheds light on huge lava flows that have erupted periodically over Earth's history, and how they have affected the atmosphere and altered the course of life on the planet. In the study, University of California, Berkeley, scientists report the most precise and accurate dates yet for the intense volcanic eruptions in India that coincided with the worldwide extinction at the end of the Cretaceous Period, the so-called K-Pg boundary. The million-year sequence of eruptions spewed lava flows for distances of at least 500 kilometers across the Indian continent, creating the so-called Deccan Traps flood basalts that in some places are nearly 2 kilometers thick. \"Now that we have dated Deccan Traps lava flows in more and different locations, we see that the transition seems to be the same everywhere. I would say, with pretty high confidence, that the eruptions occurred within 50,000 years, and maybe 30,000 years, of the impact, which means they were synchronous within the margin of error, \"said Paul Renne, a professor-in-residence of earth and planetary science at UC Berkeley, director of the Berkeley Geochronology Center and senior author of the study, which will appear online Feb. 21.\"That is an important validation of the hypothesis that the impact renewed lava flows. The new dates also confirm earlier estimates that the lava flows continued for about a million years, but contain a surprise: three-quarters of the lava erupted after the impact. Previous studies suggested that about 80 percent of the lava erupted before the impact. If most of the Deccan Traps lava had erupted before the impact, then gases emitted during the eruptions could have been the cause of global warming within the last 400,000 years of the Cretaceous Period, during which temperatures increased, on average, about 8 degrees Celsius (14.4 degrees Fahrenheit). During this period of warming, species would have evolved suited to hothouse conditions, only to be confronted by global cooling from the dust or by climate cooling gases caused by either the impact or the volcanos. The cold would have been a shock from which most creatures would never have recovered, disappearing entirely from the fossil record: literally, a mass extinction.But if most of the Deccan Traps lava emerged after the impact, this scenario needs rethinking. \"This changes our perspective on the role of the Deccan Traps in the K-Pg extinction,\" said first author Courtney Sprain, a former UC Berkeley doctoral student who is now a postdoc at the University of Liverpool in the United Kingdom. \"Either the Deccan eruptions did not play a role -- which we think unlikely -- or a lot of climate-modifying gases were erupted during the lowest volume pulse of the eruptions. The hypothesis that climate-altering volcanic gases leak out of underground magma chambers frequently, and not just during eruptions, is supported by evidence from present-day volcanos, such as those of the gas-spewing Mt. Etna in Italy and Popocatepetl in Mexico, the researchers said. Magma stewing below the surface is known to transmit gases to the atmosphere, even without eruptions."
 # summarize_article(sustainability_article, sustainability_title)
 # summarize_article(sleep_article, sleep_title)
-summarize_article(volcano_title, volcano_article)
+summarize_article("https://www.sciencedaily.com/releases/2019/02/190222101240.htm")
 #print(get_frequency(remove_stop_words_within_pos_phrase_array(clean_phrase_list(make_phrase_list(sci_daily_article))), sci_daily_article, sci_daily_title))
