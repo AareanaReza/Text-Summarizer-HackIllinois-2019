@@ -1,0 +1,66 @@
+h1 {
+  color: rgb(20, 30, 90);
+  font-size: 40px;
+  font-family: "Calibri"
+	margin: 0;
+  padding: 0;
+}
+
+.para1 {
+  margin-left: 25px;
+  line-height: 25px;
+}
+
+footer {
+  clear: left;
+  background: #ccc;
+}
+
+
+nav {
+    border-bottom: 1px solid black;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background-color: #333;
+}
+
+li {
+  float: left;
+}
+
+li a {
+  display: block;
+  color: white;
+  text-align: center;
+  padding: 5px 75px;
+  text-decoration: none;
+}
+
+li a:hover:not(.active) {
+  background-color: #111;
+}
+
+.active {
+  background-color: #4CAF50;
+}
+
+div {
+	font-size: 40px;
+	font-family: "Times New Roman"
+}
+
+summary{
+	color: black;
+	font-weight: bold
+}
+
+body {
+ 
+	background-image: url(http://darlenefranklinwrites.com/wp-content/uploads/2017/12/deluxe-professional-website-background-images-free-abstract-blue-vector-background-free-vector-in-professional-website-background-images.jpg);
+
+}
