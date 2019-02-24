@@ -3,6 +3,8 @@ import gensim
 import nltk
 import string
 import numpy as np
+
+
 # nltk.download('punkt')
 # nltk.download('averaged_perceptron_tagger')
 
@@ -10,9 +12,11 @@ import numpy as np
 def strip_punctuation(str):
     return str.translate({ord(c): '' for c in string.punctuation})
 
+
 # returns true if the word is considered a stop word
 def is_stop_word(word):
-    return word in gensim.parsing.preprocessing.STOPWORDS or len(word) <= 3
+    return word in gensim.parsing.preprocessing.STOPWORDS
+
 
 # returns a list of possible topics - words that appear directly after a keyword or words in the title
 def find_possible_topics(article_words, key_words, title_words):
@@ -20,11 +24,12 @@ def find_possible_topics(article_words, key_words, title_words):
     for word in title_words:
         if not is_stop_word(word):
             possible_topics.append(word)
-            
+
     for i in range(len(article_words)):
         if article_words[i] in key_words and article_words[i + 1] not in possible_topics and not is_stop_word(word):
             possible_topics.append(article_words[i + 1])
     return possible_topics
+
 
 # prints the top 10 results for words to complete the first summary sentence
 def print_results(frequencies):
@@ -32,6 +37,7 @@ def print_results(frequencies):
     print(sentence_structure)
     for i in range(min(len(frequencies), 10)):
         print(str(i + 1) + ". " + frequencies[i][0])
+
 
 # returns a list of words that have the part of speech (noun, plural noun, etc.) we'd use in our first summary sentence
 def get_valid_summary_words(pos_list):
@@ -48,6 +54,7 @@ def make_word_pairs(possible_topics):
     for i in range(len(possible_topics) - 1):
         pairs.append(possible_topics[i] + " " + possible_topics[i + 1])
     return pairs
+
 
 # print options for the first summary sentence for an article
 def summarize_article(article, title):
