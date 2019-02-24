@@ -30,14 +30,14 @@ Text Summarizer
 toggle between hiding and showing the dropdown content */
 function fetchUrl() {
   var url = document.getElementById("input");
-  processUrl("http://localhost:5000/data");
+  processUrl(url.value);
 }
 
 function init() {
   // Close the dropdown if the user clicks outside of it
   document.getElementById("findSummary").onclick = function(event) {
     console.log("button clicked!");
-    fetchUrl();
+    fetchUrl("http://localhost:5000/data");
     // if (!event.target.matches('.dropbtn')) {
     //   var dropdowns = document.getElementsByClassName("dropdown-content");
     //   var i;
