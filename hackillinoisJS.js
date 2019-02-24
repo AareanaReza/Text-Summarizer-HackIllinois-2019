@@ -11,7 +11,7 @@ function processUrl(url) {
     .then(function (response) {
       // handle success
       console.log(response);
-      getElementById("output") = 
+      // getElementById("output") =
     })
     .catch(function (error) {
       // handle error
