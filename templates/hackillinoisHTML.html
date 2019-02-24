@@ -17,8 +17,8 @@ Text Summarizer
 <body onload=init()>
 <h4>
 <div class="About">
-  <button onclick="fetchUrl()" class="dropbtn">Dropdown</button>
-  <div id="myDropdown" class="dropdown-content">
+  <button id="myDropdown" class="dropbtn">Dropdown</button>
+  <div id = "dropdown-content" class = "dropdown-content">
     <a href="#home">Home</a>
     <a href="#about">About</a>
     <a href="#contact">Contact</a>
@@ -36,43 +36,28 @@ function fetchUrl() {
 function init() {
   // Close the dropdown if the user clicks outside of it
   document.getElementById("findSummary").onclick = function(event) {
-    console.log("button clicked!");
+
     fetchUrl("http://localhost:5000/data");
-    // if (!event.target.matches('.dropbtn')) {
-    //   var dropdowns = document.getElementsByClassName("dropdown-content");
-    //   var i;
-    //   for (i = 0; i < dropdowns.length; i++) {
-    //     var openDropdown = dropdowns[i];
-    //     if (openDropdown.classList.contains('show')) {
-    //       openDropdown.classList.remove('show');
-    //     }
-    //   }
-    // }
   }
-}
+
+  
+  document.getElementById("myDropdown").onclick = function(event) {
+    
+    
+       var dropdowns = document.getElementById("dropdown-content");
+  
+         if (dropdowns.classList.contains('show')) {
+           dropdowns.classList.remove('show');
+          } else {
+            dropdowns.classList.add('show');
+           }
+    
+         }
+       }
+     
+
 
 </script>
-
-<!-- <script>
-      axios.get('/get/server')
-        .then(function (response) {
-          document.getElementById('people').innerHTML = response.data.map(function (person) {
-            return (
-              '<li class="row">' +
-                '<img src="https://avatars.githubusercontent.com/u/' + person.avatar + '?s=50" class="col-md-1"/>' +
-                '<div class="col-md-3">' +
-                  '<strong>' + person.name + '</strong>' +
-                  '<div>Github: <a href="https://github.com/' + person.github + '" target="_blank">' + person.github + '</a></div>' +
-                  '<div>Twitter: <a href="https://twitter.com/' + person.twitter + '" target="_blank">' + person.twitter + '</a></div>' +
-                '</div>' +
-              '</li><br/>'
-            );
-          }).join('');
-        })
-        .catch(function (err) {
-          document.getElementById('people').innerHTML = '<li class="text-danger">' + err.message + '</li>';
-        });
-  </script> -->
 
 <h6>
 <input id="phoneNumberInput" type="text" placeholder="Enter your phone number: ">

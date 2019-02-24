@@ -7,7 +7,8 @@ function myFunction() {
 
 function processUrl(url) {
   // validate URL
-  axios.get(url)
+  var host = "http://localhost:5000/data?host=" + url;
+  axios.get(host)
     .then(function (response) {
       // handle success
       console.log(response);
