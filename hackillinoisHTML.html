@@ -8,12 +8,16 @@ Text Summarizer
 </h2>
 
 <head>
-<meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="hackillinoisCSS.css">
+  <!-- <script src="https://unpkg.com/aios/dist/axios.min.js"></script> -->
+  <script src="https://unpkg.com/axios@0.18.0/dist/axios.min.js"></script>
+  <script src="hackillinoisJS.js"></script>
 </head>
-<body>
+<body onload=init()>
 <h4>
 <div class="About">
-  <button onclick="myFunction()" class="dropbtn">Dropdown</button>
+  <button onclick="fetchUrl()" class="dropbtn">Dropdown</button>
   <div id="myDropdown" class="dropdown-content">
     <a href="#home">Home</a>
     <a href="#about">About</a>
@@ -22,26 +26,54 @@ Text Summarizer
 </div>
 </h4>
 <script>
-/* When the user clicks on the button, 
+/* When the user clicks on the button,
 toggle between hiding and showing the dropdown content */
-function myFunction() {
-  document.getElementById("myDropdown").classList.toggle("show");
+function fetchUrl() {
+  var url = document.getElementById("input");
+  processUrl(url);
 }
 
-// Close the dropdown if the user clicks outside of it
-window.onclick = function(event) {
-  if (!event.target.matches('.dropbtn')) {
-    var dropdowns = document.getElementsByClassName("dropdown-content");
-    var i;
-    for (i = 0; i < dropdowns.length; i++) {
-      var openDropdown = dropdowns[i];
-      if (openDropdown.classList.contains('show')) {
-        openDropdown.classList.remove('show');
-      }
-    }
+function init() {
+  // Close the dropdown if the user clicks outside of it
+  document.getElementById("findSummary").onclick = function(event) {
+    console.log("button clicked!");
+    fetchUrl("http://localhost:9000");
+    // if (!event.target.matches('.dropbtn')) {
+    //   var dropdowns = document.getElementsByClassName("dropdown-content");
+    //   var i;
+    //   for (i = 0; i < dropdowns.length; i++) {
+    //     var openDropdown = dropdowns[i];
+    //     if (openDropdown.classList.contains('show')) {
+    //       openDropdown.classList.remove('show');
+    //     }
+    //   }
+    // }
   }
 }
+
 </script>
+
+<!-- <script>
+      axios.get('/get/server')
+        .then(function (response) {
+          document.getElementById('people').innerHTML = response.data.map(function (person) {
+            return (
+              '<li class="row">' +
+                '<img src="https://avatars.githubusercontent.com/u/' + person.avatar + '?s=50" class="col-md-1"/>' +
+                '<div class="col-md-3">' +
+                  '<strong>' + person.name + '</strong>' +
+                  '<div>Github: <a href="https://github.com/' + person.github + '" target="_blank">' + person.github + '</a></div>' +
+                  '<div>Twitter: <a href="https://twitter.com/' + person.twitter + '" target="_blank">' + person.twitter + '</a></div>' +
+                '</div>' +
+              '</li><br/>'
+            );
+          }).join('');
+        })
+        .catch(function (err) {
+          document.getElementById('people').innerHTML = '<li class="text-danger">' + err.message + '</li>';
+        });
+  </script> -->
+
 <h6>
 <input id="phoneNumberInput" type="text" placeholder="Enter your phone number: ">
 <button id="phoneNumberButton">Get Text of Summary</button>
@@ -52,7 +84,7 @@ window.onclick = function(event) {
 <h3>
 <input id="input" type="text" placeholder="Enter the website URL: ">
 
-<input type="button" onclick="myFunction()" value="Find Summary">
+<input id="findSummary" type="button" value="Find Summary">
 <br>
 </h3>
 <p id="demo"></p>
@@ -60,4 +92,3 @@ window.onclick = function(event) {
 <h5>
 <p id="output"></p>
 </h5>
-
