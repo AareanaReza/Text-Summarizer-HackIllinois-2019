@@ -3,7 +3,7 @@
 StringBuilder summary = new StringBuilder();
 
 summary.append("This article covers information about ").append(wordOne).append(" and ").append(wordTwo)
-.append("The study is about how ").append(wordTwo)
+.append("The study is about ").append(wordTwo)
 .append("It will contribute to ").append(wordThree).append(" and ").append(wordFour).append(".");
 
 //Put this message after message:
