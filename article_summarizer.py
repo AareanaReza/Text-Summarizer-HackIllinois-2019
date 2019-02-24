@@ -1,8 +1,6 @@
-import string
 import gensim
 import nltk
 import string
-import numpy as np
 
 # Using Beautiful Soup library to web scrape sciencedaily.com
 from bs4 import BeautifulSoup
