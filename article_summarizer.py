@@ -3,20 +3,25 @@ import gensim
 import nltk
 import string
 import numpy as np
+
 # nltk.download('punkt')
 # nltk.download('averaged_perceptron_tagger')
 
 max_number_of_results = 10
 title_frequency_bonus = 3
+key_words = ["for", "regarding", "concerning", "regard", "concern", "on", "displays", "predict", "how"]
+
 
 # cleans the string - strips all punctuation, trims leading/trailing whitespace, and converts to lowercase
 def clean_string(str):
     return str.translate({ord(c): '' for c in string.punctuation})
     # return str.translate(string.maketrans("", ""), string.punctuation).strip().lower()
 
+
 # returns true if the word is considered a stop word
 def is_stop_word(word):
-    return word in gensim.parsing.preprocessing.STOPWORDS or len(word) <= 3
+    return word in gensim.parsing.preprocessing.STOPWORDS or len(word) <= 2
+
 
 # returns a list of possible topics - words that appear directly after a keyword or words in the title
 def find_possible_topics(article_words, key_words, title_words):
@@ -30,6 +35,15 @@ def find_possible_topics(article_words, key_words, title_words):
             possible_topics.append(article_words[i + 1])
     return possible_topics
 
+
+def clean_words(article_words):
+    possible_words = []
+    for i in range(len(article_words)):
+        if article_words[i] is not is_stop_word(article_words[i]):
+            possible_words.append(article_words[i])
+    return possible_words
+
+
 # prints the top 10 results for words to complete the first summary sentence
 def print_results(frequencies):
     sentence_structure = "This article is about... (top word choices) "
@@ -38,6 +52,7 @@ def print_results(frequencies):
         print(str(i + 1) + ". " + frequencies[i][0])
 
     print("This article covers information about " + frequencies[0][0] + " and " + frequencies[1][0] + ".")
+
 
 # returns a list of words that have the part of speech (noun, plural noun, etc.) we'd use in our first summary sentence
 def get_valid_summary_words(pos_list):
@@ -51,9 +66,10 @@ def get_valid_summary_words(pos_list):
 
 def make_word_pairs(possible_topics):
     pairs = []
-    for i in range(len(possible_topics) - 1):
+    for i in range(len(possible_topics)):
         pairs.append(possible_topics[i] + " " + possible_topics[i + 1])
     return pairs
+
 
 # print options for the first summary sentence for an article
 def summarize_article(article, title):
@@ -63,7 +79,6 @@ def summarize_article(article, title):
     article_words = article.split()
     title_words = title.split()
 
-    key_words = ["for", "regarding", "concerning", "regard", "concern", "on", "displays", "predict"]
     possible_topics = find_possible_topics(article_words, key_words, title_words)
     possible_topics_pos_list = nltk.pos_tag(possible_topics)
     # print(possible_topics_pos_list)
@@ -93,6 +108,35 @@ def summarize_article(article, title):
     print_results(frequencies)
 
 
+def make_phrase_list(article):
+    sentence_list = article.split('.')
+    phrase_list = sentence_list
+    for phrase in sentence_list:
+        if phrase.__contains__(';'):
+            phrase_list.extend(phrase.split(';'))
+    return phrase_list
+
+
+def clean_phrase_list(phrase_list):
+    pos_phrase_list = []
+    for i in range(len(phrase_list)):
+        for word in key_words:
+            phrase_list[i] = clean_string(phrase_list[i])
+            if phrase_list[i].__contains__(" " + word):
+                pos_phrase_list.append(word + phrase_list[i].split(" " + word)[1])
+    return pos_phrase_list
+
+
+def remove_stop_words_within_pos_phrase_array(pos_phrase_list):
+    words_in_phrase_list = [[]]
+    for i in range(len(pos_phrase_list)):
+        words_in_sentence = pos_phrase_list[i].split(' ')
+        words_in_phrase_list.append(clean_words(words_in_sentence))
+        words_in_phrase_list[i] = nltk.pos_tag(words_in_phrase_list[i])
+        words_in_phrase_list[i] = get_valid_summary_words(words_in_phrase_list[i])
+    print(words_in_phrase_list)
+    return words_in_phrase_list
+
 # sample articles
 
 sustainability_title = "Sustainability Operations"
@@ -107,3 +151,4 @@ sci_daily_article = "The composition of the microbiome -- the countless bacteria
 summarize_article(sustainability_article, sustainability_title)
 summarize_article(sleep_article, sleep_title)
 summarize_article(sci_daily_article, sci_daily_title)
+print(remove_stop_words_within_pos_phrase_array(clean_phrase_list(make_phrase_list(sci_daily_article))))
