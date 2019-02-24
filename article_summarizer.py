@@ -4,9 +4,12 @@ import nltk
 # nltk.download('punkt')
 # nltk.download('averaged_perceptron_tagger')
 import string
+import numpy as np
+
 
 def strip_punctuation(str):
-    return str.translate(string.maketrans("", ""), string.punctuation)
+    return str.translate({ord(c): '' for c in string.punctuation})
+
 
 def find_possible_topics(article_words, key_words, title_words):
     possible_topics = []
@@ -18,26 +21,37 @@ def find_possible_topics(article_words, key_words, title_words):
             possible_topics.append(article_words[i + 1])
     return possible_topics
 
+
 def print_results(frequencies):
     sentence_structure = "This article is about... (top word choices) "
     print(sentence_structure)
     for i in range(min(len(frequencies), 10)):
         print(str(i + 1) + ". " + frequencies[i][0])
 
+
 def preprocess(article_words):
-   result = []
-   for word in article_words:
-       if word not in gensim.parsing.preprocessing.STOPWORDS and len(word) > 3:
-           result.append(word)
-   return result
+    result = []
+    for word in article_words:
+        if word not in gensim.parsing.preprocessing.STOPWORDS and len(word) > 3:
+            result.append(word)
+    return result
+
 
 def get_valid_summary_words(pos_list):
     valid_words = []
-    valid_pos_list = ["NN", "NNS", "NNP", "VBG"]
+    valid_pos_list = ["NN", "NNS", "NNP", "VBG", "FW"]
     for word in pos_list:
         if word[1] in valid_pos_list:
             valid_words.append(word[0])
     return valid_words
+
+
+def make_word_pairs(possible_topics):
+    pairs = []
+    for i in range(len(possible_topics) - 1):
+        pairs.append(possible_topics[i] + " " + possible_topics[i + 1])
+    return pairs
+
 
 def summarize_article(article, title):
     article = strip_punctuation(article).lower()
@@ -49,6 +63,8 @@ def summarize_article(article, title):
     key_words = ["for", "regarding", "concerning", "regard", "concern", "on", "displays", "predict"]
     possible_topics = find_possible_topics(article_words, key_words, title_words)
     possible_topics_pos_list = nltk.pos_tag(preprocess(possible_topics))
+    possible_topics_pos_list.extend((make_word_pairs(possible_topics)))
+    print(possible_topics_pos_list)
     valid_possible_topics = get_valid_summary_words(possible_topics_pos_list)
 
     frequencies = {}
@@ -65,8 +81,8 @@ def summarize_article(article, title):
                 frequencies[word] += 3
 
     frequencies = sorted(frequencies.items(),
-                        reverse=True,
-                        key=lambda x: x[1])
+                         reverse=True,
+                         key=lambda x: x[1])
 
     print_results(frequencies)
 
