@@ -11,20 +11,23 @@ from bs4 import BeautifulSoup
 import certifi
 import urllib3
 
-# nltk.download('punkt')
-# nltk.download('averaged_perceptron_tagger')
+# If downloaded the code below is unnecessary
+'''nltk.download('punkt')
+nltk.download('averaged_perceptron_tagger')'''
 
+# This is a certification with respect to the url with respect to web scraping
 http = urllib3.PoolManager(cert_reqs='CERT_REQUIRED', ca_certs=certifi.where())
 
+# This is an extra weight that is added if the word is in the title
 title_frequency_bonus = 3
 key_words = ["regarding", "concerning", "regard", "concern", "on", "displays", "predict", "how", "for", "about"]
 original_phrase_list = []
+
 
 # cleans the string - strips all punctuation, trims leading/trailing whitespace, and converts to lowercase
 def clean_string(str):
     str = str
     return str.translate({ord(c): '' for c in string.punctuation}).lower()
-    # return str.translate(string.maketrans("", ""), string.punctuation).strip().lower()
 
 
 # returns true if the word is considered a stop word
@@ -46,6 +49,7 @@ def find_possible_topics(article_words, key_words, title_words):
     return possible_topics
 
 
+# This removes all the stopwords
 def clean_words(article_words):
     possible_words = []
     for i in range(len(article_words)):
@@ -54,16 +58,15 @@ def clean_words(article_words):
     return possible_words
 
 
-# prints the top 10 results for words to complete the first summary sentence
+# prints the final result
 def print_results(frequencies, title, article):
-    '''sentence_structure = "This article is about... (top word choices) "
-    print(sentence_structure)
-    for i in range(min(len(frequencies), 10)):
-        print(str(i + 1) + ". " + frequencies[i][0])'''
-
-    print("This article covers information about " + frequencies[0][0] + " and " + frequencies[1][0] + ".")
-    print("The study is " + get_frequency(remove_stop_words_within_pos_phrase_array(clean_phrase_list(make_phrase_list(article))), article, title) + ".")
-
+    if get_frequency(remove_stop_words_within_pos_phrase_array(clean_phrase_list(make_sentence_list(article))), article, title) != "":
+        return "This article covers information about " + frequencies[0][0] + " and " + frequencies[1][0] + "." \
+               + "\nThe study is " + get_frequency(remove_stop_words_within_pos_phrase_array(clean_phrase_list(make_sentence_list(article))), article, title) + "."
+    elif len(frequencies) > 1:
+        return "This article covers information about " + frequencies[0][0] + " and " + frequencies[1][0] + "."
+    else:
+        return "Summary could not be generated"
 
 # returns a list of words that have the part of speech (noun, plural noun, etc.) we'd use in our first summary sentence
 def get_valid_summary_words(pos_list):
@@ -75,17 +78,10 @@ def get_valid_summary_words(pos_list):
     return valid_words
 
 
-def make_word_pairs(possible_topics):
-    pairs = []
-    for i in range(len(possible_topics)):
-        pairs.append(possible_topics[i] + " " + possible_topics[i + 1])
-    return pairs
-
-
 # print options for the first summary sentence for an article
 def summarize_article(article_url):
-    # Takes in the article url and returns only the text within that article
 
+    # Webscraping. Takes in the article url and returns only the text within that article
     url = article_url
     response = http.request('GET', url)
     soup = BeautifulSoup(response.data, features="html.parser")
@@ -94,11 +90,10 @@ def summarize_article(article_url):
     if (soup.find('h2', {'id': 'subtitle'}) is not None):
         title += ". " + soup.find('h2', {'id': 'subtitle'}).text
     # Takes all the <p> tags in the <div> tagged block with id= 'text'
-    div = soup.find('div', {'id': 'text'})  # attrs={'id': 'story_text'}
+    div = soup.find('div', {'id': 'text'})
     final_text = final_text + soup.find('p', {'id': 'first'}).text
     for p in div.findAll('p'):
         final_text = final_text + p.text
-
 
     article = final_text
     title = title
@@ -108,8 +103,6 @@ def summarize_article(article_url):
 
     possible_topics = find_possible_topics(article_words, key_words, title_words)
     possible_topics_pos_list = nltk.pos_tag(possible_topics)
-    # print(possible_topics_pos_list)
-    # possible_topics_pos_list.extend(make_word_pairs(possible_topics))
     valid_possible_topics = get_valid_summary_words(possible_topics_pos_list)
     frequencies = {}
 
@@ -125,17 +118,17 @@ def summarize_article(article_url):
             if word not in frequencies:
                 frequencies[word] = max(3, article_words.count(word))
             else:
-                frequencies[word] += 3
+                frequencies[word] += title_frequency_bonus
 
     # sort the dictionary in reverse order by frequency (so that the words that occur most will be printed first)
     frequencies = sorted(frequencies.items(),
                          reverse=True,
                          key=lambda x: x[1])
 
-    print_results(frequencies, title, article)
+    return print_results(frequencies, title, article)
 
-
-def make_phrase_list(article):
+# This returns a list of sentences. The sentences are split on full stop and semicolon
+def make_sentence_list(article):
     sentence_list = article.split('.')
     phrase_list = sentence_list
     for phrase in sentence_list:
@@ -143,8 +136,7 @@ def make_phrase_list(article):
             phrase_list.extend(phrase.split(';'))
     return phrase_list
 
-
-
+# This returns a list of phrases that contain a key word
 def clean_phrase_list(phrase_list):
     pos_phrase_list = []
     for i in range(len(phrase_list)):
@@ -157,7 +149,7 @@ def clean_phrase_list(phrase_list):
     original_phrase_list.extend(pos_phrase_list)
     return pos_phrase_list
 
-
+# This removes the stop words in phrases
 def remove_stop_words_within_pos_phrase_array(pos_phrase_list):
     words_in_phrase_list = []
     for i in range(len(pos_phrase_list)):
@@ -167,13 +159,12 @@ def remove_stop_words_within_pos_phrase_array(pos_phrase_list):
         words_in_phrase_list[i] = get_valid_summary_words(words_in_phrase_list[i])
     return words_in_phrase_list
 
-
+# This gets the frequency of each word in a phrase, totals it to return a weight for each phrase and returns the index
+# numbern of that phrase
 def get_frequency(words_in_phrase_list, article, title):
     article_words = article.split()
     title_words = title.split()
     frequency_of_phrases = []
-    # print(possible_topics_pos_list)
-    # possible_topics_pos_list.extend(make_word_pairs(possible_topics))
     for x in range(len(words_in_phrase_list)):
         count = 0
         for i in range(len(words_in_phrase_list[x])):
@@ -184,8 +175,9 @@ def get_frequency(words_in_phrase_list, article, title):
                     frequencies[word] = article_words.count(word)
                     count += article_words.count(word)
         frequency_of_phrases.append(count)
-    return original_phrase_list[frequency_of_phrases.index(max(frequency_of_phrases))]
+        if len(frequency_of_phrases) > 0:
+            return original_phrase_list[frequency_of_phrases.index(max(frequency_of_phrases))]
+        return ""
 
-
-summarize_article("https://www.sciencedaily.com/releases/2019/02/190221141511.htm")
-#print(get_frequency(remove_stop_words_within_pos_phrase_array(clean_phrase_list(make_phrase_list(sci_daily_article))), sci_daily_article, sci_daily_title))
+# Example use of code
+print(summarize_article("https://www.sciencedaily.com/releases/2019/02/190221141511.htm"))
