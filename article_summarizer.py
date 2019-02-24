@@ -8,15 +8,15 @@ import string
 max_number_of_results = 10
 title_frequency_bonus = 3
 
-# cleans the string - strips all punctuation, trims leading/trailing whitespace
+# cleans the string - strips all punctuation, trims leading/trailing whitespace, and converts to lowercase
 def clean_string(str):
     return str.translate(string.maketrans("", ""), string.punctuation).strip().lower()
 
-# returns true if the word is not considered a stop word
+# returns true if the word is considered a stop word
 def is_stop_word(word):
     return word in gensim.parsing.preprocessing.STOPWORDS or len(word) <= 3
 
-# returns a list of possible topics - words that appear directly after a keyword or words in the title are added
+# returns a list of possible topics - words that appear directly after a keyword or words in the title
 def find_possible_topics(article_words, key_words, title_words):
     possible_topics = []
     for word in title_words:
@@ -44,7 +44,7 @@ def get_valid_summary_words(pos_list):
             valid_words.append(word[0])
     return valid_words
 
-# print_results options for the first summary sentence for an article
+# print options for the first summary sentence for an article
 def summarize_article(article, title):
     article = clean_string(article)
     title = clean_string(title)
