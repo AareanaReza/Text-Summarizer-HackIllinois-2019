@@ -7,7 +7,6 @@
 
 ### Text-processing algorithm team: 
 * Cynthia Damodaran - dcynth cd13@illinois.edu
-* Maeve Heflin - mheflin259 mheflin2@illinois.edu
 
 ### Web-scrapers: 
 * Medha Patil - medhapatil medhap3@illinois.edu
